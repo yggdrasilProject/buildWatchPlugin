@@ -1,0 +1,50 @@
+<h4>${buildName} failed</h4>
+
+<p>
+    <b>Slave:</b> ${slave}<br>
+#if ($changeNumber)
+    <b>Gerrit Change:</b> <a href="https://review.openstack.org/#/c/${changeNumber}/${patchSetNumber}">${changeTitle}</a><br>
+#end
+
+    <b>Deployment Errors:</b> ${errors.size()}<br>
+    <b>Failed NoOp Tests:</b> ${noop.size()}<br>
+</p>
+
+#if ($errors.size() > 0)
+<table>
+    <tr>
+        <th>Deployment Errors</th>
+    </tr>
+    #foreach($error in $errors)
+    <tr>
+        <td>${error}</td>
+    </tr>
+    #end
+</table>
+#end
+
+#if ($noop.size() > 0)
+<table>
+    <tr>
+        <th colspan="6">NoOp Test Failures</th>
+    </tr>
+    <tr>
+        <th>Task</th>
+        <th>YAML</th>
+        <th>OS</th>
+        <th>Test</th>
+        <th>Result</th>
+        <th>Reason</th>
+    </tr>
+    #foreach($test in $noop)
+    <tr>
+        <td>${test.get("task")}</td>
+        <td>${test.get("yaml")}</td>
+        <td>${test.get("os")}</td>
+        <td>${test.get("test")}</td>
+        <td>${test.get("state")}</td>
+        <td>${test.get("cause")}</td>
+    </tr>
+    #end
+</table>
+#end
